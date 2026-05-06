@@ -1,0 +1,22 @@
+.DS_Store
+startup-error.log
+
+# Local .NET tool/cache directories created for publishing on this machine
+.dotnet-home/
+.nuget/
+
+# Build outputs
+**/bin/
+**/obj/
+
+# Publish outputs
+publish/
+
+# Rider / Visual Studio / VS Code
+.idea/
+.vs/
+.vscode/
+
+# User-specific files
+*.user
+*.suo

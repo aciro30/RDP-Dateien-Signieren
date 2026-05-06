@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>RdpSignierer</AssemblyName>
+    <Product>RDP-Signierer</Product>
+    <Title>RDP-Signierer</Title>
+    <Description>Desktop-Werkzeug zum Signieren von RDP-Dateien mit lokalem Zertifikat.</Description>
+    <ApplicationIcon>Assets/RdpSignierer.ico</ApplicationIcon>
+  </PropertyGroup>
+</Project>
