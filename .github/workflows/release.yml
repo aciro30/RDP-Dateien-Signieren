@@ -1,0 +1,55 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Publish WinForms app
+        shell: pwsh
+        run: >
+          dotnet publish RdpSignTool.WinForms/RdpSignTool.WinForms.csproj
+          -c Release
+          -r win-x64
+          --self-contained true
+          /p:PublishSingleFile=true
+          /p:IncludeNativeLibrariesForSelfExtract=true
+          /p:PublishTrimmed=false
+          -o publish/win-x64
+
+      - name: Package release assets
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path release | Out-Null
+          Compress-Archive -Path publish/win-x64/RdpSignierer.exe -DestinationPath release/RdpSignierer-win-x64.zip -Force
+          $hash = (Get-FileHash release/RdpSignierer-win-x64.zip -Algorithm SHA256).Hash
+          Set-Content -Path release/RdpSignierer-win-x64.sha256 -Value "$hash  RdpSignierer-win-x64.zip"
+
+      - name: Create GitHub release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: pwsh
+        run: >
+          gh release create $env:GITHUB_REF_NAME
+          release/RdpSignierer-win-x64.zip
+          release/RdpSignierer-win-x64.sha256
+          --repo $env:GITHUB_REPOSITORY
+          --title "RDP-Signierer $env:GITHUB_REF_NAME"
+          --generate-notes
